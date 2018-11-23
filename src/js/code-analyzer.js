@@ -1,19 +1,20 @@
 import * as esprima from 'esprima';
 const new_line_object = (line,type,name, condition, value) => ({line,type,name,condition,value});
 var table_array = [];
+var string_range_code;
 
 
 const parseCode = (codeToParse) => {
+    string_range_code = codeToParse;
     const root = esprima.parseScript(codeToParse);
     return root;
 };
-
-
 //reads the loc parse and saves his location
-const use_loc_to_parse = (codeToParse) => esprima.parseScript(codeToParse, {loc: true});
+const use_loc_to_parse = (codeToParse) => esprima.parseScript(codeToParse, {loc: true, range: true});
 
 //takes from the user it's input and sends it to module         
 const build_table = (codeToParse) => { 
+    string_range_code = codeToParse;
     module_builder(use_loc_to_parse(codeToParse));
     return table_array;};
 
@@ -63,27 +64,34 @@ const module_builder_second = (root) =>{
 const module_builder_third = (root) =>{
     switch(root.type){
     case 'ForStatement' : for_statement_parser(root); break;
-    case 'BinaryExpression' : return Binary_Expression_parser(root); 
-    case 'Literal': return literal_parser(root); 
-    case 'Identifier': return root.name;
-    default: return module_builder_forth(root);
+    case 'UpdateExpression' : update_expression_parser(root); break;
+    //case 'Literal': return literal_parser(root); 
+    //case 'Identifier': return root.name;
+    //default: return;
     }
 };
-
+/*
 const module_builder_forth = (root) =>{
     switch(root.type){
-    case 'MemberExpression' : return Member_Expression_parser(root); 
+    case 'BinaryExpression' : return Binary_Expression_parser(root); 
     case 'UnaryExpression' : return Unary_Expression_parser(root) ; 
     //needs to be  finished
-    case 'UpdateExpression' : update_expression_parser(root); break;
+    
+    case 'MemberExpression' : return Member_Expression_parser(root);
     default: return;
     }
 };
+*/
+/* unsued
 const Member_Expression_parser = (root) => {
-    module_builder(root.computed);
-    module_builder(root.type[1]);
-    return;
+    
+    var x = root.range;
+    var y = string_range_code.substring(x[0], x[1]);
+    return y;
+    
 
+    
+    //return ;
 };
 
 const Unary_Expression_parser = (root) => {
@@ -92,17 +100,17 @@ const Unary_Expression_parser = (root) => {
     var s= x+ y;
     return s;
 };
-
+*/
+/*
 const literal_parser = (root) => {
-    return root.value ;
+    return root.value;
 };
-
+*/
 const program_helper = (root) => {
     for(var i =0; i<root.body.length; i++){
         module_builder(root.body[i]);
     }
 };
-
 
 const function_decleration_parser = (root) => {
     var function_name = root.id.name;
@@ -129,7 +137,10 @@ const variable_decleration_parser_for_array = (root) => {
 const expression_statement_parser = (root) => {
     //var name_of_operator = root.expression.operator; -> not relevant currently
     var name_of_identifier = root.expression.left.name;
-    var value_of_identifier = module_builder(root.expression.right);
+    /*var x = root.test.range;
+    var test = string_range_code.substring(x[0], x[1]); */
+    var x = root.expression.right.range;
+    var value_of_identifier = string_range_code.substring(x[0], x[1]);
     var new_object_func_decl = new_line_object(root.loc.start.line, 'assignment expression', name_of_identifier,' ',value_of_identifier);   
     table_array.push(new_object_func_decl);
     return;
@@ -137,7 +148,8 @@ const expression_statement_parser = (root) => {
 
 
 const return_statement_parser = (root) => {
-    var value_of_return = module_builder(root.argument);
+    var x = root.argument.range;
+    var value_of_return =  string_range_code.substring(x[0], x[1]);
     var new_object_func_decl = new_line_object(root.loc.start.line, 'ReturnStatement',' ',' ',value_of_return);   
     table_array.push(new_object_func_decl);
 
@@ -146,8 +158,10 @@ const return_statement_parser = (root) => {
 
 const if_statement_parser = (root) => {
     //not sure if needs to evaluate or take the string as it is
-    var test = module_builder(root.test);
+    //var test = module_builder(root.test);
 
+    var x = root.test.range;
+    var test = string_range_code.substring(x[0], x[1]);
     var new_object_func_decl = new_line_object(root.loc.start.line, 'if statement', ' ',test,' ');   
     table_array.push(new_object_func_decl);
     module_builder(root.consequent);
@@ -157,7 +171,9 @@ const if_statement_parser = (root) => {
 
 const while_statement_parser = (root) => {
     //not sure if needs to evaluate or take the string as it is
-    var test = module_builder(root.test);
+    //var test = module_builder(root.test);
+    var x = root.test.range;
+    var test = string_range_code.substring(x[0], x[1]);
     var new_object_func_decl = new_line_object(root.loc.start.line, 'while statement', ' ',test,' ');   
     table_array.push(new_object_func_decl);
     program_helper(root.body);
@@ -167,7 +183,9 @@ const while_statement_parser = (root) => {
 //need to be fixed
 const for_statement_parser = (root) => {
     module_builder(root.init);
-    var test = module_builder(root.test);
+    //var test = module_builder(root.test);
+    var x = root.test.range;
+    var test = string_range_code.substring(x[0], x[1]);
     module_builder(root.update);
     var new_object_func_decl = new_line_object(root.loc.start.line, 'for statement',' ',test,' ');
     table_array.push(new_object_func_decl);
@@ -194,6 +212,7 @@ const update_expression_parser = (root) => {
     return;
 };
 
+/*
 const Binary_Expression_parser = (root) => {
     var left = module_builder(root.left); 
     var operator = root.operator;
@@ -202,5 +221,5 @@ const Binary_Expression_parser = (root) => {
     return s;
 };
 
-
+*/
 export {parseCode, build_table, table_array};
