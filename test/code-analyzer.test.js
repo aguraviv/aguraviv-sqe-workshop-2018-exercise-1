@@ -43,27 +43,21 @@ describe('The code parser parser', () => {
 
         it('testing while details in the array', () => {
             assert.deepEqual(table_array[9].type , 'while statement');});
-        it('testing funtion details in array', () => {
+        it('testing funtion variable X in array', () => {
             assert.deepEqual(table_array[1].name , 'X');});
-        it('testing funtion details in array', () => {
+        it('testing funtion variable mid in array', () => {
             assert.deepEqual(table_array[10].name , 'mid');});
-        it('testing funtion details in array', () => {
+        it('testing condition details in array', () => {
             assert.deepEqual(table_array[9].condition , 'low <= high');});
-        /*it('testing funtion details in array', () => {
-            assert.deepEqual(table_array[14].value , 'mid + 1');});*/
-        it('testing funtion details in array', () => {
+        it('testing condition details in array', () => {
             assert.deepEqual(table_array[13].type , 'if statement');});
-        it('testing funtion details in array', () => {
+        it('testing funtion variables in array', () => {
             assert.deepEqual(table_array[5].name , 'high');});
 }));
-    
-
-//}));
+                
                
-               
-               
-describe('The code parser parser', () => {
-    it('testing let details', () => {
+describe('for testing', () => {
+    it('testing for in a function body', () => {
         assert.deepEqual(build_table(`function binarySearch(X, V, n){
                                let low, high, mid;
                                low = 0;
@@ -84,8 +78,8 @@ describe('The code parser parser', () => {
 });
                
                
-describe('The code parser parser', () => {
-    it('testing let details', () => {
+describe('testing for in arrays', () => {
+    it('testing location', () => {
                                
         assert.deepEqual(build_table(`function binarySearch(X, V, n){
                                    let low, high, mid;
@@ -102,5 +96,4 @@ describe('The code parser parser', () => {
                                    }
                                    return -1;
                                }`)[0].line, 1 );});
-                       
 });

@@ -6,7 +6,7 @@
         <style>
             table {
                 width: 100%;
-                height: 100%;
+                height: 80%;
             }
 
             .textAreaWrapper {
@@ -16,7 +16,7 @@
 
             textarea {
                 width: 80%;
-                height: 95%;
+                height: 60%;
             }
         </style>
     </head>
@@ -50,16 +50,6 @@
                 <td>
                     <div>
                         <button id="codeSubmissionButton">Parse code</button>
-                        <thead>
-                                <tr>
-                                    <th> Line </th>
-                                    <th> Type </th>
-                                    <th> Name </th>
-                                    <th> Condition </th>
-                                    <th> Value </th>
-                                </tr>
-                            </thead>
-                            <tbody id = "table_data"></tbody>
                     </div>
 
                 </td>
@@ -68,6 +58,18 @@
             </tr>
         </table>
 
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th> Line </th>
+                    <th> Type </th>
+                    <th> Name </th>
+                    <th> Condition </th>
+                    <th> Value </th>
+                </tr>
+            </thead>
+            <tbody id = "table_data"></tbody>
+          </table>
         <script src="dist/bundle.js"></script>
     </body>
 </html>
