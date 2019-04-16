@@ -9,10 +9,10 @@ $(document).ready(function () {
         
         //builds the new string to be added and sends it to the table
         build_table(codeToParse);
-        var string_to_insert;
-        for(var index=0; index<table_array.length; index++ ){
+        let string_to_insert;
+        for(let index=0; index<table_array.length; index++ ){
             //console.log("table_array in the " + j + " line:" + table_array[j].line + "name: " +table_array[j].name );
-            var insert_to_table = the_string_to_add(table_array[index]);
+            let insert_to_table = the_string_to_add(table_array[index]);
             string_to_insert = string_to_insert + insert_to_table + ' ';
         }
         $('#table_data').html(string_to_insert);
